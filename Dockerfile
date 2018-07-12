@@ -6,9 +6,14 @@ ADD run.sh /run.sh
 RUN chmod +x /*.sh && \
 	apt-get update && \
 	DEBIAN_FRONTEND=noninteractive && \
-	apt-get -y install software-properties-common python-software-properties && \
-	locale-gen en_US.UTF-8 && \
-	export LANG=en_US.UTF-8 && \
+	apt-get -y install software-properties-common python-software-properties wget curl vim git && \
+	locale-gen zh_TW.UTF-8 && \
+	dpkg-reconfigure locales && \
+	export LANG=zh_TW.UTF-8 && \
+	echo "alias ll='ls -al'" >> /root/.profile && \
+	echo "export LANG=zh_TW.UTF-8" >> /root/.profile && \ 
+	echo "export LANGUAGE=zh_TW" >> /root/.profile && \
+	echo "export LC_ALL=zh_TW.UTF-8" >> /root/.profile && \
 	add-apt-repository -y ppa:ondrej/php && \
 	add-apt-repository -y ppa:ondrej/apache2
 RUN DEBIAN_FRONTEND=noninteractive && apt-get update && \
@@ -18,6 +23,10 @@ RUN DEBIAN_FRONTEND=noninteractive && apt-get update && \
 	echo "extension=imagick.so" | sudo tee /etc/php/7.0/mods-available/imagick.ini && \
 	ln -sf /etc/php/7.2/mods-available/imagick.ini /etc/php/7.2/apache2/conf.d/20-imagick.ini
 
+ENV LANG zh_TW.UTF-8  
+ENV LANGUAGE zh_TW
+ENV LC_ALL zh_TW.UTF-8	
+	
 EXPOSE 80
 WORKDIR /var/www/html
 ENTRYPOINT ["/run.sh"]
